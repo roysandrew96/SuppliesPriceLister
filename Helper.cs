@@ -1,13 +1,15 @@
 ﻿using Microsoft.Extensions.Configuration;
 using SuppliesPriceLister.Models;
-using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using System;
 
 namespace SuppliesPriceLister
 {
     static class Helper
     {
+
         public static decimal GetUSDExchangeRate()
         {
             //
@@ -46,6 +48,24 @@ namespace SuppliesPriceLister
             Currency usd = new Currency("USD", "United States $", usdExchangeRate);
             currencies.Add(usd.CurrencyCode, usd);
             return currencies;
+        }
+
+        /// <summary>
+        /// The DisplayProducts method displays a List of Products as per an agreed format, in descending AUD Price order
+        /// </summary>
+        /// <param name="products"></param>
+        public static void DisplayProducts( List<Product> products )
+        {
+            // Firstly, sort the products list appropriately
+            var orderedProducts = from s in products
+                                          orderby s.AUDPrice descending
+                                          select s;
+
+            foreach (Product p in orderedProducts)
+            {
+                Console.WriteLine($"{p.ProductId}, {p.Description}, {p.AUDPrice}");
+                Console.WriteLine();
+            }
         }
 
     }

@@ -15,7 +15,6 @@ namespace SuppliesPriceLister.Models
             Description = "";
             localPrice = 0.0m;
             SupplierCurrencyCode = "AUD";
-            
         }
 
         public Product( string productId, string description, string supplierCurrencyCode, decimal localPrice )
@@ -38,6 +37,13 @@ namespace SuppliesPriceLister.Models
             set { localPrice = value; }
         }
 
-        public decimal AUDPrice { get; set; }
+        public decimal AUDPrice
+        {
+            get
+            {
+                // TODO: Use Currency to convert to AUD
+                return LocalPrice;
+            }
+        }
     }
 }

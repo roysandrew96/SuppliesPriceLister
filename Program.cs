@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Json;
+using System.Linq;
 using SuppliesPriceLister.Models;
 
 namespace SuppliesPriceLister
@@ -23,13 +22,22 @@ namespace SuppliesPriceLister
 
             // Load Humphries CSV Data
 
-            List<Product> HumphriesProducts = DataLoad.LoadCSVProducts("humphries.csv");
+            List<Product> humphriesProducts = DataLoad.LoadCSVProducts("humphries.csv");
 
             // Load MegaCorp JSON Data
 
-            List<mcorpPartner> mcorpPartners = DataLoad.LoadJSONProducts("megacorp.json");
+            List<Product> megaCorpProducts = DataLoad.LoadJSONProducts("megacorp.json");
 
-            Console.WriteLine($"Exchange Rate Decimal {usdExchangeRate}");
+            // Merge the lists
+
+            List<Product> allProducts = humphriesProducts.Union(megaCorpProducts).ToList();
+
+            // Display the merged list of products
+
+            Helper.DisplayProducts(allProducts);
+
+            Console.WriteLine("Coding Challenge Output Complete");
+            Console.WriteLine("================================");
             Console.ReadLine();
         }
 

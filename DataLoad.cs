@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
+using Newtonsoft.Json;
+
 
 namespace SuppliesPriceLister
 {
@@ -39,14 +40,28 @@ namespace SuppliesPriceLister
             }
             return products;
         }
-
-        public static List<mcorpPartner> LoadJSONProducts( string fileName)
+        /// <summary>
+        /// Load the Humphries Products which are in a JSON format
+        /// </summary>
+        /// <param name="fileName">The file path</param>
+        /// <returns></returns>
+        public static List<Product> LoadJSONProducts( string fileName)
         {
-            List<mcorpPartner> partners;
+            List<Product> products = new List<Product>();
 
-            string jsonString = File.ReadAllText(fileName);
-            partners = JsonSerializer.Deserialize<List<mcorpPartner>>(jsonString);
-            return partners;
+            var jsonString = File.ReadAllText(fileName);
+            var partners = JsonConvert.DeserializeObject<mcorpPartners>(jsonString);
+
+            foreach (mcorpPartner partner in partners.Partners)
+            {
+                foreach ( mcorpSupply supply in partner.Supplies)
+                {
+                    Product p = new Product(supply.Id, supply.Description, "USD", (decimal)supply.PriceInCents / 100);
+                    products.Add(p);
+                }
+            }
+
+            return products;
         }
     }
 }
