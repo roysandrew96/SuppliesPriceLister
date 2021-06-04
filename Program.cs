@@ -7,26 +7,19 @@ namespace SuppliesPriceLister
 {
     static class Program
     {
+
         static void Main()
         {
-            // Variable Declarations
-            decimal usdExchangeRate = 0;
-            Dictionary<string, Currency> Currencies = new Dictionary<string, Currency>();
-            List<Product> Products = new List<Product>();
-
-            // Retrieve the USD Exchange Rate from the Configuration File
-            usdExchangeRate = Helper.GetUSDExchangeRate();
-
-            // Set up a collection of currencies to use
-            Currencies = Helper.InitialiseCurrencies( usdExchangeRate );
+            // Create the Helper Class, which manages the Exchange Rate and Currencies
+            Helper helper = new Helper();
 
             // Load Humphries CSV Data
 
-            List<Product> humphriesProducts = DataLoad.LoadCSVProducts("humphries.csv");
+            List<Product> humphriesProducts = DataLoad.LoadCSVProducts("Humphries", "humphries.csv", helper);
 
             // Load MegaCorp JSON Data
 
-            List<Product> megaCorpProducts = DataLoad.LoadJSONProducts("megacorp.json");
+            List<Product> megaCorpProducts = DataLoad.LoadJSONProducts("MegaCorp", "megacorp.json", helper);
 
             // Merge the lists
 
@@ -34,7 +27,7 @@ namespace SuppliesPriceLister
 
             // Display the merged list of products
 
-            Helper.DisplayProducts(allProducts);
+            helper.DisplayProducts(allProducts);
 
             Console.WriteLine("Coding Challenge Output Complete");
             Console.WriteLine("================================");
